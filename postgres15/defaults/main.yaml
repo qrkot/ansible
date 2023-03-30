@@ -1,0 +1,9 @@
+---
+
+postgres_repo_rpm: https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+postgresql_gpg_key: https://download.postgresql.org/pub/repos/yum/RPM-GPG-KEY-PGDG
+
+postgresql_server: postgresql15-server
+postgresql_setup: /usr/pgsql-15/bin/postgresql-15-setup
+postgresql_service: postgresql-15
+postgresql_hba_file: /var/lib/pgsql/15/data/pg_hba.conf

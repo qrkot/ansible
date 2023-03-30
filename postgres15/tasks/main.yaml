@@ -1,0 +1,38 @@
+---
+
+- name: Install Postgres GPG key
+  rpm_key:
+    state: present
+    key: '{{ postgresql_gpg_key }}'
+
+- name: Install latest Postres repo RPM
+  ansible.builtin.dnf:
+    name: '{{ postgres_repo_rpm }}'
+    state: present
+
+- name: Disable built-in Postgresql module
+  ansible.builtin.command:
+    cmd: dnf -qy module disable postgresql
+
+- name: Install Postgresql server
+  ansible.builtin.dnf:
+    name: '{{ postgresql_server }}'
+    state: present
+
+- name: Initialize DB
+  ansible.builtin.command:
+    cmd: '{{ postgresql_setup }} initdb'
+
+- name: Configure HBA password auth
+  lineinfile:
+    path: '{{ postgresql_hba_file }}'
+    regex: '^local\s+ all\s+ all\s+ peer'
+    line: "local\tall\tall\tpassword"
+
+
+- name: Start and enable Postgres service
+  ansible.builtin.service:
+    name: '{{ postgresql_service}}'
+    state: started
+    enabled: yes
+  

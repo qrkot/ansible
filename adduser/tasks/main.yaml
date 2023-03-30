@@ -1,0 +1,32 @@
+---
+
+- name: Create user for Ansible
+  user:
+    name: "{{ default_user }}"
+    state: present
+    groups: wheel
+    append: false
+    create_home: true
+
+- name: Add user to passwordless sudoers
+  lineinfile:
+    path: /etc/sudoers
+    line: '{{ default_user }} ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+
+- name: Set SSH key access
+  ansible.posix.authorized_key:
+    user: "{{ default_user }}"
+    state: present
+    key: '{{ item }}'
+  with_file:
+    - files/id_rsa.pub
+
+- name: Disable SSH password authentication
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    state: present
+    regexp: '^PasswordAuthentication yes'
+    line: 'PasswordAuthentication no'
+  notify:
+  - Restart SSH
