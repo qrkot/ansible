@@ -1,0 +1,21 @@
+---
+- name: Intall tar archiver
+  ansible.builtin.dnf:
+    name: tar
+    state: present
+
+- name: Download and unpack {{ maven_version }}
+  ansible.builtin.unarchive:
+    src: "{{ maven_url }}"
+    dest: /opt
+    remote_src: true
+
+- name: Link binaries to /usr/local/bin
+  ansible.builtin.file:
+    src: "/opt/{{ maven_dir }}/bin/{{ item }}"
+    dest: "/usr/local/bin/{{ item }}"
+    state: link
+  loop:
+    - mvn
+    - mvnDebug
+    - mvnyjp

@@ -1,0 +1,6 @@
+---
+
+adoptium_repo_url: https://packages.adoptium.net/artifactory/rpm/rhel/$releasever/$basearch/
+adoptium_repo_gpg: https://packages.adoptium.net/artifactory/api/gpg/key/public
+
+temurin_version: "17"

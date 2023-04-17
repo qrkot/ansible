@@ -1,0 +1,15 @@
+---
+
+- name: Add Adoptium repo
+  ansible.builtin.yum_repository:
+    name: adoptium
+    description: Adoptium Temurin JDK
+    baseurl: "{{ adoptium_repo_url }}"
+    gpgcheck: true
+    enabled: true
+    gpgkey: "{{ adoptium_repo_gpg }}"
+
+- name: Install Temurin JDK v. "{{ temurin_version }}"
+  ansible.builtin.dnf:
+    name: "temurin-{{ temurin_version }}-jdk"
+    state: present
