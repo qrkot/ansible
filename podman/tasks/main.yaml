@@ -1,0 +1,8 @@
+---
+
+- name: Install Podman with Docker-wrapper
+  ansible.builtin.dnf:
+    name:
+      - podman
+      - podman-compose
+      - podman-docker

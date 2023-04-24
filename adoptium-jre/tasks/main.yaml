@@ -9,7 +9,7 @@
     enabled: true
     gpgkey: "{{ adoptium_repo_gpg }}"
 
-- name: Install Temurin JDK v. {{ temurin_version }}
+- name: Install Temurin JRE v. {{ temurin_version }}
   ansible.builtin.dnf:
-    name: "temurin-{{ temurin_version }}-jdk"
+    name: "temurin-{{ temurin_version }}-jre"
     state: present
