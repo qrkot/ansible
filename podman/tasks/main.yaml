@@ -6,3 +6,5 @@
       - podman
       - podman-compose
       - podman-docker
+      - podman-plugins
+      - netavark

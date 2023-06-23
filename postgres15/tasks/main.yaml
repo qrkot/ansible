@@ -5,7 +5,7 @@
     state: present
     key: '{{ postgresql_gpg_key }}'
 
-- name: Install latest Postres repo RPM
+- name: Install latest Postgres repo RPM
   ansible.builtin.dnf:
     name: '{{ postgres_repo_rpm }}'
     state: present
