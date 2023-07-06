@@ -1,0 +1,33 @@
+---
+
+- name: Install Docker GPG key
+  rpm_key:
+    state: present
+    key: '{{ docker_gpg_key }}'
+
+- name: Install yum-utils
+  ansible.builtin.dnf:
+    name: yum-utils
+    state: present
+
+- name: Install Docker repo 
+  ansible.builtin.command:
+    cmd: yum-config-manager --add-repo={{ docker_repo }}
+    creates: /etc/yum.repos.d/docker-ce.repo
+
+- name: Install Docker 
+  ansible.builtin.dnf:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: present
+
+- name: Start and enable Docker service
+  ansible.builtin.service:
+    name: '{{ docker_service}}'
+    state: started
+    enabled: yes
+  

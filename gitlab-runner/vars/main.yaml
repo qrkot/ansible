@@ -1,0 +1,7 @@
+---
+
+runner_user: "runner"
+runner_executor: "docker"
+runner_binary_url: "https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64"
+runner_reg_url: "http://10.1.11.42"
+runner_token: "glrt-4Cy1Zzf8CLz5Awegor35"

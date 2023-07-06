@@ -1,0 +1,31 @@
+---
+
+- name: Check runner user
+  ansible.builtin.getent:
+    database: passwd
+    key: "{{ runner_user }}"
+    register: check_runner_user
+
+- name: Create runner user
+  ansible.builtin.user:
+    name: "{{ runner_user }}"
+    shell: /bin/bash
+    comment: Gitlab runner
+  when: check_runner_user is failed
+    
+- name: Download runner binary
+  ansible.builtin.get_url:
+    url: "{{ runner_binary_url }}"
+    dest: /usr/local/bin/gitlab-runner
+    mode: '0755'
+
+- name: Install and run as service
+  ansible.builtin.command:
+    cmd: |
+      /usr/local/bin/gitlab-runner install --user={{ runner_user }} --working-directory=/home/{{ runner_user }}
+      /usr/local/bin/gitlab-runner start
+
+- name: Register the runner
+  ansible.builtin.command:
+    cmd: |
+      /usr/local/bin/gitlab-runner register --non-interactive --url "{{ runner_reg_url }}" --token "{{ runner_token }}" --executor docker --docker-image alpine:latest

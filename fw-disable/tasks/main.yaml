@@ -1,0 +1,13 @@
+---
+
+- name: Disable firewalld
+  ansible.builtin.service:
+    name: firewalld
+    state: stopped
+    enabled: false
+
+- name: Disable Selinux
+  ansible.posix.selinux:
+    state: disabled
+  when: ansible_selinux.status == "enabled"
+

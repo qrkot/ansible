@@ -1,0 +1,39 @@
+---
+
+- name: Create podman user
+  ansible.builtin.user:
+    name: "{{ podman_user }}"
+    state: present
+    system: true
+    create_home: false
+
+- name: Fix user subiuds and subgids
+  ansible.builtin.shell: |
+    usermod --add-subuids 100000-165535 --add-subgids 100000-165535 "{{ podman_user }}"
+    loginctl enable-linger "{{ podman_user }}"
+
+
+#- name: Enable XDG_RUNTIME_DIR without user login
+#  ansible.builtin.command:
+#    cmd: "loginctl enable-linger {{ podman_user }}"
+
+- name: Allow privileged ports
+  ansible.posix.sysctl:
+    name: net.ipv4.ip_unprivileged_port_start
+    value: "0"
+    state: present
+    reload: true
+  when: podman_allow_privileged_ports
+
+- name: Add user namespaces
+  ansible.posix.sysctl:
+    name: user.max_user_namespaces
+    value: "28633"
+    state: present
+    reload: true
+ 
+- name: Install Slirp. Podman should be installed with podman role.
+  ansible.builtin.dnf:
+    name:
+      - slirp4netns
+  when: podman_allow_privileged_ports
