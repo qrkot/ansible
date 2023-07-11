@@ -1,0 +1,37 @@
+---
+
+- name: Download and install Helm
+  ansible.builtin.unarchive:
+    src: "https://get.helm.sh/helm-v{{ helm_version }}-linux-amd64.tar.gz"
+    remote_src: yes
+    dest: '{{ local_bindir }}'
+    extra_opts:
+      - --strip-components=1
+    include: 
+      - linux-amd64/helm
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Download and install Sops
+  ansible.builtin.get_url:
+    url: "https://github.com/getsops/sops/releases/download/v{{ sops_version }}/sops-v{{ sops_version }}.linux.amd64"
+    dest: "{{ local_bindir }}/sops"
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Download and install Age
+  ansible.builtin.unarchive:
+    src: "https://github.com/FiloSottile/age/releases/download/v{{ age_version }}/age-v{{ age_version }}-linux-amd64.tar.gz"
+    remote_src: yes
+    dest: '{{ local_bindir }}'
+    extra_opts:
+      - --strip-components=1
+    include:
+      - age/age-keygen
+      - age/age
+    mode: '0755'
+    owner: root
+    group: root
+
